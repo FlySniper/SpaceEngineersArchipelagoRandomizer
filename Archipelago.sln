@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.156
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Archipelago", "Archipelago.csproj", "{7747E639-0D68-4F49-8DC4-1E333173298D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Debug|x64.ActiveCfg = Debug|x64
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Debug|x64.Build.0 = Debug|x64
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Release|x64.ActiveCfg = Release|x64
+		{7747E639-0D68-4F49-8DC4-1E333173298D}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CECABA57-35C1-4F60-97FF-2426FCFAB26C}
+	EndGlobalSection
+EndGlobal

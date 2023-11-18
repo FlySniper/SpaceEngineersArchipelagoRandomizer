@@ -1,0 +1,89 @@
+Light Armor Block:LargeBlockArmorBlock:38800:true:0
+Heavy Armor Block:LargeHeavyBlockArmorBlock:38801:true:0
+Round Armor Slope:LargeBlockArmorRoundSlope:38802:true:0
+Heavy Armor Round Slope:LargeHeavyBlockArmorRoundSlope:38803:true:0
+Light Armor Ramps:LargeBlockArmorSlope2Base:38804:true:0
+Light Armor Ramp Corners:LargeBlockArmorCorner2Base:38805:true:0
+Heavy Armor Ramps:LargeHeavyBlockArmorSlope2Base:38806:true:0
+Heavy Armor Ramp Corners:LargeHeavyBlockArmorCorner2Base:38807:true:0
+Light Armor Sloped Corners:LargeBlockArmorSlopedCornerTip:38808:true:0
+Heavy Armor Sloped Corners:LargeBlockHeavyArmorSlopedCornerTip:38809:true:0
+DisplayName_BlockGroup_LightArmorTransitionBlocks:LargeBlockArmorSlopeTransitionBase:38810:true:0
+DisplayName_BlockGroup_HeavyArmorTransitionBlocks:LargeBlockHeavyArmorSlopeTransitionBase:38811:true:0
+DisplayName_Block_LightArmorPanel:LargeArmorPanelLight:38812:true:0
+DisplayName_Block_heavyArmorPanel:LargeArmorPanelHeavy:38813:true:0
+Projector:LargeProjector:38814:true:0
+Target Dummy:TargetDummy:38815:true:0
+Sound Block:LargeBlockSoundBlock:38816:true:0
+Button Panel:ButtonPanelLarge:38817:true:0
+Automation Blocks:LargeProgrammableBlock:38818:true:0
+Communication Blocks:LargeBlockRadioAntenna:38820:true:0
+Remote Control:LargeBlockRemoteControl:38821:true:0
+Control Station:LargeBlockCockpitSeat:38822:true:0
+Gyroscope:LargeBlockGyro:38823:true:0
+Control Seat:OpenCockpitLarge:38824:true:0
+Door::38825:true:0
+Airtight Hangar Door::38826:true:0
+Blast Doors:ArmorCenter:38827:true:0
+Store:StoreBlock:38828:true:0
+Battery:LargeBlockBatteryBlock:38829:true:0
+Fueled Energy Sources:LargeBlockSmallGenerator:38830:true:0
+Renewable Energy Sources:LargeBlockSolarPanel:38831:true:0
+Engineer Plushie:EngineerPlushie:38832:true:0
+Saberoid Plushie:SabiroidPlushie:38833:true:0
+Anniversary Statue:LargeBlockStatueEngineer:38834:true:0
+Gravity Blocks:VirtualMassLarge:38835:true:0
+Passage::38836:true:0
+Steel Catwalk:LargeSteelCatwalk:38837:true:0
+Stairs::38838:true:0
+DisplayName_Block_AirDucts:AirDuct1:38839:true:0
+Corner LCD Screens:LargeBlockCorner_LCD_1:38840:true:0
+LCD Screens:LargeTextPanel:38841:true:0
+Lighting:LargeBlockFrontLight:38842:true:0
+Gas Tanks::38843:true:0
+Air Vent::38844:true:0
+Cargo Containers:LargeBlockSmallContainer:38845:true:0
+Small Conveyor Tube:SmallBlockConveyor:38846:true:0
+Conveyor Junction:LargeBlockConveyor:38847:true:0
+Inputs/Outputs:Collector:38848:true:0
+Piston:LargePistonBase:38849:true:0
+Rotor:LargeStator:38850:true:0
+DisplayName_Block_Hinge:LargeHinge:38851:true:0
+Medical Blocks:LargeBlockCryoChamber:38852:true:0
+Refinery:LargeRefinery:38853:true:0
+O2/H2 Generator::38854:true:0
+Assembler:SurvivalKitLarge:38855:true:0
+Oxygen Farm:LargeBlockOxygenFarm:38856:true:0
+Upgrade Modules:LargeProductivityModule:38857:true:0
+letters A to H:LargeSymbolA:38858:true:0
+DisplayName_BlockGroup_Numbers:LargeSymbol1:38859:true:0
+Symbols:LargeSymbolHyphen:38860:true:0
+Large Ion Thruster:LargeBlockLargeThrust:38861:true:0
+Large Hydrogen Thruster:LargeBlockLargeHydrogenThrust:38862:true:0
+Large Atmospheric Thruster:LargeBlockLargeAtmosphericThrust:38863:true:0
+Ship Tools:LargeShipGrinder:38864:true:0
+Ore Detector:LargeOreDetector:38865:true:0
+Landing Gear:LargeBlockLandingGear:38866:true:0
+Jump Drive:LargeJumpDrive:38867:true:0
+Parachute Hatch:LgParachute:38868:true:0
+Warhead:LargeWarhead:38869:true:0
+Decoy:LargeDecoy:38870:true:0
+Turreted Weapons::38871:true:0
+Stationary Weapons:LargeMissileLauncher:38872:true:0
+Wheel Suspension 3x3 Right:Suspension3x3:38873:true:0
+Wheel Suspension 3x3 Left:Suspension3x3mirrored:38874:true:0
+Static Wheels:Wheel1x1:38875:true:0
+Shutters:LargeWindowSquare:38876:true:0
+Medium Corner Windows:Window1x2Face:38877:true:0
+Small Corner Windows:Window1x1Face:38878:true:0
+Medium Windows:Window1x2Flat:38879:true:0
+Small Windows:Window1x1Flat:38880:true:0
+Large Windows:Window2x3Flat:38881:true:0
+Round Windows:WindowRound:38882:true:0
+Oxygen Bottle::38883:true:0
+Hydrogen Bottle::38884:true:0
+Iron Ingot::38885:true:0
+Nickel Ingot::38886:true:0
+Silicon Ingot::38887:true:0
+Gravel::38888:true:0
+Progressive Space Increase::38889:true:0
