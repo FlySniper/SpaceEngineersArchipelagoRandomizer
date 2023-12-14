@@ -35,7 +35,6 @@ namespace Archipelago
         List<IMyVoxelBase> planets = new List<IMyVoxelBase>();
         bool justAfterLoad = true;
         const string APItemsFileName = "ArchipelagoMultiworldItems.txt";
-        const string APLocationsFileName = "ArchipelagoMultiworldLocations.txt";
         BoundingSphereD worldLimit = new BoundingSphereD(Vector3D.Zero, 75000);
         int worldLimitProgressionLevel = -1;
 
@@ -52,7 +51,6 @@ namespace Archipelago
                     }
                     stopwatch.Reset();
                     stopwatch.Start();
-                    MyLog.Default.WriteLine("AP Time");
                     readAPItemsTXT();
                     checkExtraItemsCount();
                     checkPlayersOnPlanets();
@@ -81,24 +79,24 @@ namespace Archipelago
         private void setWorldLimit()
         {
             var item = items["Progressive Space Size"];
-            if (item.itemCount > worldLimitProgressionLevel)
+            if (item.itemCount != worldLimitProgressionLevel)
             {
                 if (item.itemCount == 0)
                 {
                     worldLimit = new BoundingSphereD(Vector3D.Zero, 75000);
                     worldLimitProgressionLevel = 0;
                 }
-                else if (item.itemCount == 1)
+                if (item.itemCount == 1)
                 {
                     worldLimit = new BoundingSphereD(Vector3D.Zero, 2500000);
                     worldLimitProgressionLevel = 1;
                 }
-                else if (item.itemCount == 2)
+                if (item.itemCount == 2)
                 {
                     worldLimit = new BoundingSphereD(Vector3D.Zero, 4000000);
                     worldLimitProgressionLevel = 2;
                 }
-                else if (item.itemCount == 3)
+                if (item.itemCount == 3)
                 {
                     worldLimit = new BoundingSphereD(Vector3D.Zero, 100000000);
                     worldLimitProgressionLevel = 3;
@@ -377,13 +375,9 @@ namespace Archipelago
         public override void LoadData()
         {
             Instance = this;
-            if (!MyAPIGateway.Multiplayer.IsServer)
+            if (!MyAPIGateway.Session.IsServer)
             {
                 return;
-            }
-            if (MyAPIGateway.Utilities.FileExistsInGlobalStorage(APLocationsFileName))
-            {
-                MyAPIGateway.Utilities.DeleteFileInGlobalStorage(APLocationsFileName);
             }
             AP_Items_Locations_Filler.fill(items, locations);
 
@@ -521,9 +515,14 @@ namespace Archipelago
                 var grid = entity as IMyCubeGrid;
                 if (grid != null)
                 {
-                    
+                    List<IMySlimBlock> blocks = new List<IMySlimBlock>();
                     grid.OnBlockAdded += Grid_OnBlockAdded;
                     grid.OnBlockIntegrityChanged += Grid_OnBlockIntegrityChanged;
+                    grid.GetBlocks(blocks);
+                    if (blocks.Count == 1)
+                    {
+                        Prevent_Block_Build(blocks[0]);
+                    }
                 }
             }
             
@@ -536,6 +535,10 @@ namespace Archipelago
 
         private void Outside_World_Limit()
         {
+            if (worldLimitProgressionLevel == 3)
+            {
+                return;
+            }
             HashSet<IMyEntity> characters_and_grids = new HashSet<IMyEntity>();
             MyAPIGateway.Entities.GetEntities(characters_and_grids, (ent) => ent is IMyCharacter || ent is IMyCubeGrid);
             foreach (IMyEntity obj in characters_and_grids)
@@ -569,11 +572,43 @@ namespace Archipelago
             if (old < current)
             {
                 var inventoryItem = inventory.GetItemAt(inventory.ItemCount - 1).Value;
+
                 if (locations.ContainsKey(inventoryItem.Type.TypeId + ":" + inventoryItem.Type.SubtypeId))
                 {
                     var location = locations[inventoryItem.Type.TypeId + ":" + inventoryItem.Type.SubtypeId];
                     writeAPLocationTXT(location);
                 }
+                if (inventoryItem.Type.SubtypeId.Equals("FireworksBoxBlue"))
+                {
+                    var location = locations["Assembled Fireworks"];
+                    writeAPLocationTXT(location);
+                }
+                if (inventoryItem.Type.SubtypeId.Equals("FireworksBoxGreen"))
+                {
+                    var location = locations["Assembled Fireworks"];
+                    writeAPLocationTXT(location);
+                }
+                if (inventoryItem.Type.SubtypeId.Equals("FireworksBoxRed"))
+                {
+                    var location = locations["Assembled Fireworks"];
+                    writeAPLocationTXT(location);
+                }
+                if (inventoryItem.Type.SubtypeId.Equals("FireworksBoxPink"))
+                {
+                    var location = locations["Assembled Fireworks"];
+                    writeAPLocationTXT(location);
+                }
+                if (inventoryItem.Type.SubtypeId.Equals("FireworksBoxYellow"))
+                {
+                    var location = locations["Assembled Fireworks"];
+                    writeAPLocationTXT(location);
+                }
+                if (inventoryItem.Type.SubtypeId.Equals("FireworksBoxRainbow"))
+                {
+                    var location = locations["Assembled Fireworks"];
+                    writeAPLocationTXT(location);
+                }
+
             }
         }
 
@@ -586,26 +621,37 @@ namespace Archipelago
                 bool hasItem = false;
                 if (blockDefinition.BlockVariantsGroup == null || blockDefinition.BlockVariantsGroup.Blocks == null || blockDefinition.BlockVariantsGroup.Blocks.Length == 0)
                 {
-                    hasItem = items[blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName].itemCount > 0;
-                    var location = locations[blockDefinition.Id.TypeId + "-" + blockDefinition.Id.SubtypeName];
-                    if (!location.isFound && hasItem)
+                    if (locations.ContainsKey("Built " + blockDefinition.Id.TypeId + "-" + blockDefinition.Id.SubtypeName))
                     {
-                        writeAPLocationTXT(location);
+                        hasItem = items[blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName].itemCount > 0;
+                        var location = locations["Built " + blockDefinition.Id.TypeId + "-" + blockDefinition.Id.SubtypeName];
+                        if (!location.isFound && hasItem)
+                        {
+                            writeAPLocationTXT(location);
+                        }
                     }
                 }
                 else
                 {
-                    hasItem = items[blockDefinition.BlockVariantsGroup.DisplayNameText].itemCount > 0;
-                    var location = locations[blockDefinition.BlockVariantsGroup.DisplayNameText];
-                    if(!location.isFound && hasItem)
+                    if (locations.ContainsKey("Built " + blockDefinition.BlockVariantsGroup.DisplayNameText))
                     {
-                        writeAPLocationTXT(location);
+                        hasItem = items[blockDefinition.BlockVariantsGroup.DisplayNameText].itemCount > 0;
+                        var location = locations["Built " + blockDefinition.BlockVariantsGroup.DisplayNameText];
+                        if (!location.isFound && hasItem)
+                        {
+                            writeAPLocationTXT(location);
+                        }
                     }
                 }
             }
         }
 
         private void Grid_OnBlockAdded(IMySlimBlock block)
+        {
+            Prevent_Block_Build(block);
+        }
+
+        private static void Prevent_Block_Build(IMySlimBlock block)
         {
             var stackInfo = block.ComponentStack.GetComponentStackInfo(0);
             var stackSubtype = stackInfo.DefinitionId.SubtypeName;
@@ -620,11 +666,13 @@ namespace Archipelago
             bool isBuildable = false;
             if (blockDefinition.BlockVariantsGroup == null || blockDefinition.BlockVariantsGroup.Blocks == null || blockDefinition.BlockVariantsGroup.Blocks.Length == 0)
             {
-                isBuildable = items[blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName].itemCount > 0;
+                if (items.ContainsKey(blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName))
+                    isBuildable = items[blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName].itemCount > 0;
             }
             else
             {
-                isBuildable = items[blockDefinition.BlockVariantsGroup.DisplayNameText].itemCount > 0;
+                if (items.ContainsKey(blockDefinition.BlockVariantsGroup.DisplayNameText))
+                    isBuildable = items[blockDefinition.BlockVariantsGroup.DisplayNameText].itemCount > 0;
             }
 
             if (!isBuildable)
@@ -656,6 +704,10 @@ namespace Archipelago
                 string[] lines = wholeFile.Split('\n');
                 foreach(string line in lines)
                 {
+                    if (line == null || line.Equals(""))
+                    {
+                        continue;
+                    }
                     string [] segments = line.Split(':');
                     bool isGroup = bool.Parse(segments[3]);
                     string kind = "";
@@ -680,24 +732,12 @@ namespace Archipelago
             {
                 return;
             }
-            if(!MyAPIGateway.Utilities.FileExistsInGlobalStorage(APLocationsFileName))
+            string APItemsFileName = $"apSend{location.id}";
+            if(!MyAPIGateway.Utilities.FileExistsInGlobalStorage(APItemsFileName))
             {
-                using (TextWriter writeFile = MyAPIGateway.Utilities.WriteFileInGlobalStorage(APLocationsFileName))
+                using (TextWriter writeFile = MyAPIGateway.Utilities.WriteFileInGlobalStorage(APItemsFileName))
                 {
                     writeFile.Write("");
-                    writeFile.Flush();
-                    writeFile.Close();
-                }
-            }
-            using (TextReader readFile = MyAPIGateway.Utilities.ReadFileInGlobalStorage(APLocationsFileName))
-            {
-                string wholeFile = readFile.ReadToEnd();
-                readFile.Close();
-                using (TextWriter writeFile = MyAPIGateway.Utilities.WriteFileInGlobalStorage(APLocationsFileName))
-                {
-                    location.isFound = true;
-                    writeFile.Write(wholeFile);
-                    writeFile.WriteLine(location.ToString());
                     writeFile.Flush();
                     writeFile.Close();
                 }
