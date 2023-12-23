@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AP_Item_Location.cs" />
+    <Compile Include="AP_Settings.cs" />
     <Compile Include="Archipelago.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

@@ -35,8 +35,10 @@ namespace Archipelago
         List<IMyVoxelBase> planets = new List<IMyVoxelBase>();
         bool justAfterLoad = true;
         const string APItemsFileName = "ArchipelagoMultiworldItems.txt";
+        public static AP_Settings settings = new AP_Settings();
         BoundingSphereD worldLimit = new BoundingSphereD(Vector3D.Zero, 75000);
         int worldLimitProgressionLevel = -1;
+        Random random = new Random();
 
         public override void UpdateAfterSimulation()
         {
@@ -44,9 +46,76 @@ namespace Archipelago
             {
                 if (stopwatch.ElapsedMilliseconds >= 1000 && MyAPIGateway.Multiplayer.IsServer)
                 {
-                    if(justAfterLoad)
+                    settings.readAPSettings();
+                    if (justAfterLoad)
                     {
                         justAfterLoad = false;
+                        bool planetsSpawned;
+                        if (!(MyAPIGateway.Utilities.GetVariable("archipelago_planets_spawned", out planetsSpawned) && planetsSpawned))
+                        {
+                            var earthDistance = settings.getNumber("earth_like_distance", 200) * 1000;
+                            var tritonDistance = settings.getNumber("triton_distance", 200) * 1000;
+                            var marsDistance = settings.getNumber("mars_distance", 200) * 1000;
+                            var alienDistance = settings.getNumber("alien_planet_distance", 200) * 1000;
+                            var pertamDistance = settings.getNumber("pertam_distance", 200) * 1000;
+                            switch (settings.getNumber("starting_planet_choice", 0))
+                            {
+                                case (0):
+                                default:
+                                    {
+                                        earthDistance = 0;
+                                        break;
+                                    }
+                                case (1):
+                                    {
+                                        tritonDistance = 0;
+                                        break;
+                                    }
+                                case (2):
+                                    {
+                                        marsDistance = 0;
+                                        break;
+                                    }
+                                case (3):
+                                    {
+                                        alienDistance = 0;
+                                        break;
+                                    }
+                                case (4):
+                                    {
+                                        pertamDistance = 0;
+                                        break;
+                                    }
+                            }
+                            var planetSize = settings.getNumber("earth_like_size", 120) * 1000;
+                            var planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, earthDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("EarthLike", planetSize, random.Next(), planetPosition);
+                            planetSize = settings.getNumber("triton_size", 120) * 1000;
+                            planetPosition = calcPlanetPosition(planetSize, 48151.8 / 40126.5, tritonDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Triton", planetSize, random.Next(), planetPosition);
+                            planetSize = settings.getNumber("mars_size", 120) * 1000;
+                            planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, marsDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Mars", planetSize, random.Next(), planetPosition);
+                            planetSize = settings.getNumber("alien_planet_size", 120) * 1000;
+                            planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, alienDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Alien", planetSize, random.Next(), planetPosition);
+                            planetSize = settings.getNumber("pertam_size", 120) * 1000;
+                            planetPosition = calcPlanetPosition(planetSize, 30818.1621 / 30066.5, pertamDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Pertam", planetSize, random.Next(), planetPosition);
+                            planetSize = settings.getNumber("moon_size", 20) * 1000;
+                            var moonDistance = settings.getNumber("moon_distance", 200) * 1000;
+                            planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, moonDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Moon", planetSize, random.Next(), planetPosition);
+                            planetSize = settings.getNumber("europa_size", 20) * 1000;
+                            var europaDistance = settings.getNumber("europa_distance", 200) * 1000;
+                            planetPosition = calcPlanetPosition(planetSize, 10070 / 9500, europaDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Europa", planetSize, random.Next(), planetPosition);
+                            planetSize = settings.getNumber("titan_size", 20) * 1000;
+                            var titanDistance = settings.getNumber("titan_distance", 200) * 1000;
+                            planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, europaDistance);
+                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Titan", planetSize, random.Next(), planetPosition);
+                            MyAPIGateway.Utilities.SetVariable<bool>("archipelago_planets_spawned", true);
+                        }
                         MyAPIGateway.Session.VoxelMaps.GetInstances(planets, (vox) => vox is MyPlanet);
                     }
                     stopwatch.Reset();
@@ -56,6 +125,7 @@ namespace Archipelago
                     checkPlayersOnPlanets();
                     setWorldLimit();
                     Outside_World_Limit();
+                    checkVictory();
                 }
             }
             catch (Exception e)
@@ -65,6 +135,92 @@ namespace Archipelago
                 if (MyAPIGateway.Session?.Player != null)
                     MyAPIGateway.Utilities.ShowNotification($"[ ERROR: {GetType().FullName}: {e.Message} ]", 10000, MyFontEnum.Red);
             }
+        }
+
+        private void checkVictory()
+        {
+            // Build jump drive goal (aka 0) is handled immediatly when the block is built
+            if (settings.getNumber("goal") == 1)
+            {
+                if (MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Earth"].id}") && 
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Moon"].id}") &&
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Mars"].id}") &&
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Europa"].id}") &&
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Alien"].id}") &&
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Titan"].id}") &&
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Pertam"].id}") &&
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Space"].id}") &&
+                    MyAPIGateway.Utilities.FileExistsInGlobalStorage($"apSend{locations["Visited Triton"].id}"))
+                {
+                    string APVictoryFileName = "apVictory";
+                    if (!MyAPIGateway.Utilities.FileExistsInGlobalStorage(APVictoryFileName))
+                    {
+                        using (TextWriter writeFile = MyAPIGateway.Utilities.WriteFileInGlobalStorage(APVictoryFileName))
+                        {
+                            writeFile.Write("");
+                            writeFile.Flush();
+                            writeFile.Close();
+                        }
+                    }
+                }
+            }
+            if (settings.getNumber("goal") == 2)
+            {
+                // TODO: Defeat Boss Victory check
+            }
+        }
+
+        private Vector3D calcPlanetPosition(int radius, double hillHeightRatio, double distance)
+        {
+            double maxHeight = radius * hillHeightRatio;
+            double size = (radius + radius);
+            long boxSize = 1;
+            while (boxSize < size)
+                boxSize *= 2;
+            double halfBoxSize = boxSize / -2.0;
+            var planetoffset = new Vector3D(halfBoxSize);
+            if (distance == 0.0)
+            {
+                return planetoffset;
+            }
+            var a = random.Next((int) -distance, (int) distance) / Math.Sqrt(2.0);
+            var b = random.Next((int)-distance, (int)distance) / Math.Sqrt(2.0);
+            double x = 0.0;
+            double y = 0.0;
+            double z = 0.0;
+            switch (random.Next(0,3))
+            {
+                case (0):
+                default:
+                    {
+                        x = a;
+                        y = b;
+                        z = Math.Sqrt(x * x + y * y + distance*distance);
+                        if (random.Next(0, 2) == 0)
+                            z *= -1.0;
+                        break;
+                    }
+                case (1):
+                    {
+                        x = a;
+                        z = b;
+                        y = Math.Sqrt(x * x + z * z + distance * distance);
+                        if (random.Next(0, 2) == 0)
+                            y *= -1.0;
+                        break;
+                    }
+                case (2):
+                    {
+                        z = a;
+                        y = b;
+                        x = Math.Sqrt(y * y + z * z + distance * distance);
+                        if (random.Next(0, 2) == 0)
+                            x *= -1.0;
+                        break;
+                    }
+            }
+            var center = new Vector3D(x, y, z);
+            return center + planetoffset;
         }
 
         public override void Draw()
@@ -83,17 +239,45 @@ namespace Archipelago
             {
                 if (item.itemCount == 0)
                 {
-                    worldLimit = new BoundingSphereD(Vector3D.Zero, 75000);
+                    switch (settings.getNumber("starting_planet_choice", 0))
+                    {
+                        case (0):
+                        default:
+                        {
+                            worldLimit = new BoundingSphereD(Vector3D.Zero, settings.getNumber("earth_like_size", (int)(75/ 1.25)) * 1.25 * 1000);
+                            break;
+                        }
+                        case (1):
+                        {
+                            worldLimit = new BoundingSphereD(Vector3D.Zero, settings.getNumber("triton_size", (int)(75 / 1.25)) * 1.25 * 1000);
+                            break;
+                        }
+                        case (2):
+                        {
+                            worldLimit = new BoundingSphereD(Vector3D.Zero, settings.getNumber("mars_size", (int)(75 / 1.25)) * 1.25 * 1000);
+                            break;
+                        }
+                        case (3):
+                        {
+                            worldLimit = new BoundingSphereD(Vector3D.Zero, settings.getNumber("alien_planet_size", (int)(75 / 1.25)) * 1.25 * 1000);
+                            break;
+                        }
+                        case (4):
+                        {
+                            worldLimit = new BoundingSphereD(Vector3D.Zero, settings.getNumber("pertam_size", (int)(75 / 1.25)) * 1.25 * 1000);
+                            break;
+                        }
+                    }
                     worldLimitProgressionLevel = 0;
                 }
                 if (item.itemCount == 1)
                 {
-                    worldLimit = new BoundingSphereD(Vector3D.Zero, 2500000);
+                    worldLimit = new BoundingSphereD(Vector3D.Zero, settings.getNumber("second_world_size", 2500) * 1000);
                     worldLimitProgressionLevel = 1;
                 }
                 if (item.itemCount == 2)
                 {
-                    worldLimit = new BoundingSphereD(Vector3D.Zero, 4000000);
+                    worldLimit = new BoundingSphereD(Vector3D.Zero, settings.getNumber("third_world_size", 4000) * 1000);
                     worldLimitProgressionLevel = 2;
                 }
                 if (item.itemCount == 3)
@@ -640,6 +824,20 @@ namespace Archipelago
                         if (!location.isFound && hasItem)
                         {
                             writeAPLocationTXT(location);
+                        }
+                    }
+                }
+                // Jump Drive Victory
+                if (settings.getNumber("goal", -1) == 0 && block.FatBlock is IMyJumpDrive)
+                {
+                    string APVictoryFileName = "apVictory";
+                    if (!MyAPIGateway.Utilities.FileExistsInGlobalStorage(APVictoryFileName))
+                    {
+                        using (TextWriter writeFile = MyAPIGateway.Utilities.WriteFileInGlobalStorage(APVictoryFileName))
+                        {
+                            writeFile.Write("");
+                            writeFile.Flush();
+                            writeFile.Close();
                         }
                     }
                 }
