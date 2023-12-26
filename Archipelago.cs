@@ -87,30 +87,30 @@ namespace Archipelago
                                         break;
                                     }
                             }
-                            var planetSize = settings.getNumber("earth_like_size", 120) * 1000;
+                            var planetSize = settings.getNumber("earth_like_size", 120) * 2000;
                             var planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, earthDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("EarthLike", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("triton_size", 120) * 1000;
+                            planetSize = settings.getNumber("triton_size", 120) * 2000;
                             planetPosition = calcPlanetPosition(planetSize, 48151.8 / 40126.5, tritonDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Triton", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("mars_size", 120) * 1000;
+                            planetSize = settings.getNumber("mars_size", 120) * 2000;
                             planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, marsDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Mars", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("alien_planet_size", 120) * 1000;
+                            planetSize = settings.getNumber("alien_planet_size", 120) * 2000;
                             planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, alienDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Alien", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("pertam_size", 120) * 1000;
+                            planetSize = settings.getNumber("pertam_size", 120) * 2000;
                             planetPosition = calcPlanetPosition(planetSize, 30818.1621 / 30066.5, pertamDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Pertam", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("moon_size", 20) * 1000;
+                            planetSize = settings.getNumber("moon_size", 20) * 2000;
                             var moonDistance = settings.getNumber("moon_distance", 200) * 1000;
                             planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, moonDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Moon", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("europa_size", 20) * 1000;
+                            planetSize = settings.getNumber("europa_size", 20) * 2000;
                             var europaDistance = settings.getNumber("europa_distance", 200) * 1000;
                             planetPosition = calcPlanetPosition(planetSize, 10070 / 9500, europaDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Europa", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("titan_size", 20) * 1000;
+                            planetSize = settings.getNumber("titan_size", 20) * 2000;
                             var titanDistance = settings.getNumber("titan_distance", 200) * 1000;
                             planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, europaDistance);
                             MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Titan", planetSize, random.Next(), planetPosition);
@@ -173,7 +173,7 @@ namespace Archipelago
         private Vector3D calcPlanetPosition(int radius, double hillHeightRatio, double distance)
         {
             double maxHeight = radius * hillHeightRatio;
-            double size = (radius + radius);
+            double size = (maxHeight + maxHeight) / 2.0;
             long boxSize = 1;
             while (boxSize < size)
                 boxSize *= 2;
