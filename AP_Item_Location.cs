@@ -54,6 +54,82 @@ namespace Archipelago
     {
     }
 
+    public class AP_Location_Combos : Dictionary<string, string>
+    {
+        public AP_Location_Combos()
+        {
+            this["Wheel Suspension 3x3 Right"] = "Static Wheels";
+            this["Wheel Suspension 3x3 Left"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheelmirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel1x1mirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel2x2Mirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel5x5mirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel1x1"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel2x2"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel5x5"] = "Static Wheels";
+            this["Offroad Wheel Suspension 3x3 Right"] = "Static Wheels";
+            this["Offroad Wheel Suspension 3x3 Left"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel2x2"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:RealWheel5x5"] = "Static Wheels";
+            this["DisplayName_BlockGroup_OffroadWheelStaticGroup"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheelmirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheel1x1mirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheel2x2Mirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheel5x5mirrored"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheel"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheel1x1"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheel2x2"] = "Static Wheels";
+            this["MyObjectBuilder_Wheel:OffroadRealWheel5x5"] = "Static Wheels";
+            this["Beam Block"] = "Light Armor Block";
+            this["Round Armor Slope"] = "Light Armor Block";
+            this["Light Armor Ramps"] = "Light Armor Block";
+            this["Light Armor Ramp Corners"] = "Light Armor Block";
+            this["Light Armor Sloped Corners"] = "Light Armor Block";
+            this["DisplayName_BlockGroup_LightArmorTransitionBlocks"] = "Light Armor Block";
+            this["DisplayName_Block_LightArmorPanel"] = "Light Armor Block";
+            this["Heavy Armor Round Slope"] = "Heavy Armor Block";
+            this["Heavy Armor Ramps"] = "Heavy Armor Block";
+            this["Heavy Armor Ramp Corners"] = "Heavy Armor Block";
+            this["Heavy Armor Sloped Corners"] = "Heavy Armor Block";
+            this["DisplayName_BlockGroup_HeavyArmorTransitionBlocks"] = "Heavy Armor Block";
+            this["DisplayName_Block_heavyArmorPanel"] = "Heavy Armor Block";
+            this["Scaffold Block"] = "Light Armor Block";
+            this["Interior Structure"] = "Passage";
+            this["Shower"] = "Passage";
+            this["Desk"] = "Passage";
+            this["Decorative Utility"] = "Passage";
+            this["Couch"] = "Passage";
+            this["Neon Tubes"] = "Lighting";
+            this["Storage Shelves"] = "Passage";
+            this["Armory"] = "Passage";
+            this["Access Panel 1"] = "Button Panel";
+            this["Sci-Fi Large Atmospheric Thruster"] = "Large Atmospheric Thruster";
+            this["Sci-Fi Large Ion Thruster"] = "Large Ion Thruster";
+            this["Industrial Large Hydrogen Thruster"] = "Large Hydrogen Thruster";
+            this["Large Warfare Ion Thruster"] = "Large Ion Thruster";
+            this["Dead Engineers"] = "Anniversary Statue";
+            this["Barrel"] = "Passage";
+            this["Railing Straight"] = "Steel Catwalk";
+            this["DisplayName_Block_CatwalkWall"] = "Steel Catwalk";
+            this["Embrasure"] = "Blast Doors";
+            this["Very Large LCD Panels from the Sparks Of the Future pack."] = "LCD Screens";
+            this["Exhaust Pipe"] = "Fueled Energy Sources";
+            this["Heat Vent"] = "Fueled Energy Sources";
+            this["Industrial Conveyor Pipes"] = "Conveyor Junction";
+            this["Barred Windows"] = "Shutters";
+            this["Half Windows"] = "Shutters";
+            this["Bridge Windows"] = "Shutters";
+            this["Warning Sign Trade"] = "Shutters";
+            this["Medium Corner Windows"] = "Shutters";
+            this["Small Corner Windows"] = "Shutters";
+            this["Medium Windows"] = "Shutters";
+            this["Small Windows"] = "Shutters";
+            this["Large Windows"] = "Shutters";
+            this["Round Windows"] = "Shutters";
+        }
+    }
+
     public class AP_Items_Locations_Filler
     {
         public static long STARTING_ITEM_ID = 38800;
@@ -80,7 +156,7 @@ namespace Archipelago
             {"Sound Block", 38816},
             {"Button Panel", 38817},
             {"Automation Blocks", 38818},
-            {"AI Flight {Move}", 38819},
+            {"AI Flight (Move)", 38819},
             {"Communication Blocks", 38820},
             {"Remote Control", 38821},
             {"Control Station", 38822},

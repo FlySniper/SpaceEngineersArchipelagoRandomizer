@@ -32,6 +32,7 @@ namespace Archipelago
         private static Stopwatch stopwatch = Stopwatch.StartNew();
         public static AP_Items items = new AP_Items();
         public static AP_Locations locations = new AP_Locations();
+        public static AP_Location_Combos locationCombos = new AP_Location_Combos();
         List<IMyVoxelBase> planets = new List<IMyVoxelBase>();
         bool justAfterLoad = true;
         const string APItemsFileName = "ArchipelagoMultiworldItems.txt";
@@ -47,76 +48,81 @@ namespace Archipelago
                 if (stopwatch.ElapsedMilliseconds >= 1000 && MyAPIGateway.Multiplayer.IsServer)
                 {
                     settings.readAPSettings();
+
+                    bool planetsSpawned;
+                    if (!(MyAPIGateway.Utilities.GetVariable("archipelago_planets_spawned", out planetsSpawned) && planetsSpawned) && settings.settingsPresent)
+                    {
+                        var earthDistance = settings.getNumber("earth_like_distance", 200) * 1000;
+                        var tritonDistance = settings.getNumber("triton_distance", 200) * 1000;
+                        var marsDistance = settings.getNumber("mars_distance", 200) * 1000;
+                        var alienDistance = settings.getNumber("alien_planet_distance", 200) * 1000;
+                        var pertamDistance = settings.getNumber("pertam_distance", 200) * 1000;
+                        switch (settings.getNumber("starting_planet_choice", 0))
+                        {
+                            case (0):
+                            default:
+                                {
+                                    earthDistance = 0;
+                                    break;
+                                }
+                            case (1):
+                                {
+                                    tritonDistance = 0;
+                                    break;
+                                }
+                            case (2):
+                                {
+                                    marsDistance = 0;
+                                    break;
+                                }
+                            case (3):
+                                {
+                                    alienDistance = 0;
+                                    break;
+                                }
+                            case (4):
+                                {
+                                    pertamDistance = 0;
+                                    break;
+                                }
+                        }
+                        var planetSize = settings.getNumber("earth_like_size", 120) * 2000;
+                        var planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, earthDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("EarthLike", planetSize, random.Next(), planetPosition);
+                        planetSize = settings.getNumber("triton_size", 120) * 2000;
+                        planetPosition = calcPlanetPosition(planetSize, 48151.8 / 40126.5, tritonDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Triton", planetSize, random.Next(), planetPosition);
+                        planetSize = settings.getNumber("mars_size", 120) * 2000;
+                        planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, marsDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Mars", planetSize, random.Next(), planetPosition);
+                        planetSize = settings.getNumber("alien_planet_size", 120) * 2000;
+                        planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, alienDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Alien", planetSize, random.Next(), planetPosition);
+                        planetSize = settings.getNumber("pertam_size", 120) * 2000;
+                        planetPosition = calcPlanetPosition(planetSize, 30818.1621 / 30066.5, pertamDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Pertam", planetSize, random.Next(), planetPosition);
+                        planetSize = settings.getNumber("moon_size", 20) * 2000;
+                        var moonDistance = settings.getNumber("moon_distance", 200) * 1000;
+                        planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, moonDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Moon", planetSize, random.Next(), planetPosition);
+                        planetSize = settings.getNumber("europa_size", 20) * 2000;
+                        var europaDistance = settings.getNumber("europa_distance", 200) * 1000;
+                        planetPosition = calcPlanetPosition(planetSize, 10070 / 9500, europaDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Europa", planetSize, random.Next(), planetPosition);
+                        planetSize = settings.getNumber("titan_size", 20) * 2000;
+                        var titanDistance = settings.getNumber("titan_distance", 200) * 1000;
+                        planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, europaDistance);
+                        MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Titan", planetSize, random.Next(), planetPosition);
+                        MyAPIGateway.Utilities.SetVariable<bool>("archipelago_planets_spawned", true);
+                    }
                     if (justAfterLoad)
                     {
                         justAfterLoad = false;
-                        bool planetsSpawned;
-                        if (!(MyAPIGateway.Utilities.GetVariable("archipelago_planets_spawned", out planetsSpawned) && planetsSpawned))
-                        {
-                            var earthDistance = settings.getNumber("earth_like_distance", 200) * 1000;
-                            var tritonDistance = settings.getNumber("triton_distance", 200) * 1000;
-                            var marsDistance = settings.getNumber("mars_distance", 200) * 1000;
-                            var alienDistance = settings.getNumber("alien_planet_distance", 200) * 1000;
-                            var pertamDistance = settings.getNumber("pertam_distance", 200) * 1000;
-                            switch (settings.getNumber("starting_planet_choice", 0))
-                            {
-                                case (0):
-                                default:
-                                    {
-                                        earthDistance = 0;
-                                        break;
-                                    }
-                                case (1):
-                                    {
-                                        tritonDistance = 0;
-                                        break;
-                                    }
-                                case (2):
-                                    {
-                                        marsDistance = 0;
-                                        break;
-                                    }
-                                case (3):
-                                    {
-                                        alienDistance = 0;
-                                        break;
-                                    }
-                                case (4):
-                                    {
-                                        pertamDistance = 0;
-                                        break;
-                                    }
-                            }
-                            var planetSize = settings.getNumber("earth_like_size", 120) * 2000;
-                            var planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, earthDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("EarthLike", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("triton_size", 120) * 2000;
-                            planetPosition = calcPlanetPosition(planetSize, 48151.8 / 40126.5, tritonDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Triton", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("mars_size", 120) * 2000;
-                            planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, marsDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Mars", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("alien_planet_size", 120) * 2000;
-                            planetPosition = calcPlanetPosition(planetSize, 67200.0 / 60000.0, alienDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Alien", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("pertam_size", 120) * 2000;
-                            planetPosition = calcPlanetPosition(planetSize, 30818.1621 / 30066.5, pertamDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Pertam", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("moon_size", 20) * 2000;
-                            var moonDistance = settings.getNumber("moon_distance", 200) * 1000;
-                            planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, moonDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Moon", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("europa_size", 20) * 2000;
-                            var europaDistance = settings.getNumber("europa_distance", 200) * 1000;
-                            planetPosition = calcPlanetPosition(planetSize, 10070 / 9500, europaDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Europa", planetSize, random.Next(), planetPosition);
-                            planetSize = settings.getNumber("titan_size", 20) * 2000;
-                            var titanDistance = settings.getNumber("titan_distance", 200) * 1000;
-                            planetPosition = calcPlanetPosition(planetSize, 9785 / 9500, europaDistance);
-                            MyAPIGateway.Session.VoxelMaps.SpawnPlanet("Titan", planetSize, random.Next(), planetPosition);
-                            MyAPIGateway.Utilities.SetVariable<bool>("archipelago_planets_spawned", true);
-                        }
                         MyAPIGateway.Session.VoxelMaps.GetInstances(planets, (vox) => vox is MyPlanet);
+                    }
+                    else
+                    {
+
                     }
                     stopwatch.Reset();
                     stopwatch.Start();
@@ -702,6 +708,7 @@ namespace Archipelago
                     List<IMySlimBlock> blocks = new List<IMySlimBlock>();
                     grid.OnBlockAdded += Grid_OnBlockAdded;
                     grid.OnBlockIntegrityChanged += Grid_OnBlockIntegrityChanged;
+                    MyVisualScriptLogicProvider.GridJumped += Gird_Jumped;
                     grid.GetBlocks(blocks);
                     if (blocks.Count == 1)
                     {
@@ -714,6 +721,23 @@ namespace Archipelago
             {
                 var character = entity as IMyCharacter;
                 character.GetInventory().OnVolumeChanged += Character_OnVolumeChanged;
+            }
+        }
+
+        private void Gird_Jumped(long playerId, string gridName, long gridId)
+        {
+            if (settings.getNumber("goal", -1) == 0)
+            { 
+                string APVictoryFileName = "apVictory";
+                if (!MyAPIGateway.Utilities.FileExistsInGlobalStorage(APVictoryFileName))
+                {
+                    using (TextWriter writeFile = MyAPIGateway.Utilities.WriteFileInGlobalStorage(APVictoryFileName))
+                    {
+                        writeFile.Write("");
+                        writeFile.Flush();
+                        writeFile.Close();
+                    }
+                }
             }
         }
 
@@ -805,10 +829,16 @@ namespace Archipelago
                 bool hasItem = false;
                 if (blockDefinition.BlockVariantsGroup == null || blockDefinition.BlockVariantsGroup.Blocks == null || blockDefinition.BlockVariantsGroup.Blocks.Length == 0)
                 {
-                    if (locations.ContainsKey("Built " + blockDefinition.Id.TypeId + "-" + blockDefinition.Id.SubtypeName))
+                    string locationStr = blockDefinition.Id.TypeId + "-" + blockDefinition.Id.SubtypeName;
+                    if (locationCombos.ContainsKey(locationStr))
                     {
-                        hasItem = items[blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName].itemCount > 0;
-                        var location = locations["Built " + blockDefinition.Id.TypeId + "-" + blockDefinition.Id.SubtypeName];
+                        locationStr = locationCombos[locationStr];
+                    }
+                    locationStr = "Built " + locationStr;
+                    if (locations.ContainsKey(locationStr))
+                    {
+                        hasItem = items[locationStr.Replace("Built ", "")].itemCount > 0;
+                        var location = locations[locationStr];
                         if (!location.isFound && hasItem)
                         {
                             writeAPLocationTXT(location);
@@ -817,27 +847,19 @@ namespace Archipelago
                 }
                 else
                 {
-                    if (locations.ContainsKey("Built " + blockDefinition.BlockVariantsGroup.DisplayNameText))
+                    string locationStr = blockDefinition.BlockVariantsGroup.DisplayNameText;
+                    if (locationCombos.ContainsKey(locationStr))
                     {
-                        hasItem = items[blockDefinition.BlockVariantsGroup.DisplayNameText].itemCount > 0;
-                        var location = locations["Built " + blockDefinition.BlockVariantsGroup.DisplayNameText];
+                        locationStr = locationCombos[locationStr];
+                    }
+                    locationStr = "Built " + locationStr;
+                    if (locations.ContainsKey(locationStr))
+                    {
+                        hasItem = items[locationStr.Replace("Built ", "")].itemCount > 0;
+                        var location = locations[locationStr];
                         if (!location.isFound && hasItem)
                         {
                             writeAPLocationTXT(location);
-                        }
-                    }
-                }
-                // Jump Drive Victory
-                if (settings.getNumber("goal", -1) == 0 && block.FatBlock is IMyJumpDrive)
-                {
-                    string APVictoryFileName = "apVictory";
-                    if (!MyAPIGateway.Utilities.FileExistsInGlobalStorage(APVictoryFileName))
-                    {
-                        using (TextWriter writeFile = MyAPIGateway.Utilities.WriteFileInGlobalStorage(APVictoryFileName))
-                        {
-                            writeFile.Write("");
-                            writeFile.Flush();
-                            writeFile.Close();
                         }
                     }
                 }
@@ -859,22 +881,40 @@ namespace Archipelago
             var blockPosWorld = new Vector3D(blockPos.X * grid.GridSize + gridPos.X, blockPos.Y * grid.GridSize + gridPos.Y, blockPos.Z * grid.GridSize + gridPos.Z);
             var forward = new Vector3D((float)grid.WorldMatrix.Forward.X, (float)grid.WorldMatrix.Forward.Y, (float)grid.WorldMatrix.Forward.Z);
             var up = new Vector3D((float)grid.WorldMatrix.Up.X, (float)grid.WorldMatrix.Up.Y, (float)grid.WorldMatrix.Up.Z);
+            MyLog.Default.WriteLineAndConsole(block.BlockDefinition.Id.SubtypeName);
+            if (block.BlockDefinition.Id.SubtypeName.Equals("EmotionControllerLarge") || block.BlockDefinition.Id.SubtypeName.Equals("EmotionControllerSmall"))
+            {
+                MyLog.Default.WriteLineAndConsole($"Emotion Controller Built: {block.BlockDefinition.Id.SubtypeName}.");
+                return; // Emotion Controllers have no object builder????
+            }
             var blockBuilder = block.GetObjectBuilder();
             var blockDefinition = MyDefinitionManager.Static.GetCubeBlockDefinition(blockBuilder);
             bool isBuildable = false;
+            string itemStr = "";
             if (blockDefinition.BlockVariantsGroup == null || blockDefinition.BlockVariantsGroup.Blocks == null || blockDefinition.BlockVariantsGroup.Blocks.Length == 0)
             {
-                if (items.ContainsKey(blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName))
-                    isBuildable = items[blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName].itemCount > 0;
+                itemStr = blockDefinition.Id.TypeId + ":" + blockDefinition.Id.SubtypeName;
+                if (locationCombos.ContainsKey(itemStr))
+                {
+                    itemStr = locationCombos[itemStr];
+                }
+                if (items.ContainsKey(itemStr))
+                    isBuildable = items[itemStr].itemCount > 0;
             }
             else
             {
-                if (items.ContainsKey(blockDefinition.BlockVariantsGroup.DisplayNameText))
-                    isBuildable = items[blockDefinition.BlockVariantsGroup.DisplayNameText].itemCount > 0;
+                itemStr = blockDefinition.BlockVariantsGroup.DisplayNameText;
+                if (locationCombos.ContainsKey(itemStr))
+                {
+                    itemStr = locationCombos[itemStr];
+                }
+                if (items.ContainsKey(itemStr))
+                    isBuildable = items[itemStr].itemCount > 0;
             }
 
             if (!isBuildable)
             {
+                MyLog.Default.WriteLineAndConsole($"Build Blocked: {itemStr}.");
                 block.CubeGrid.RemoveBlock(block);
                 MyFloatingObjects.Spawn(
                     MyDefinitionManager.Static.GetComponentDefinition(new MyDefinitionId(typeof(MyObjectBuilder_Component), stackSubtype)),
